@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>あなたに最適なポートフォリオ用ツール診断</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f7f1eb;
+      --paper:#fffdfb;
+      --ink:#5f554f;
+      --muted:#94877e;
+      --line:#ecdfd5;
+      --shadow:0 16px 40px rgba(160,132,116,.10);
+      --accent:#c69a86;
+      --accent-soft:#f5e8e0;
+      --note:#76cdbd;
+      --note-bg:#ebfaf6;
+      --notion:#645c56;
+      --notion-bg:#f3f0ed;
+      --canva:#ab8fff;
+      --canva-bg:#f1edff;
+      --studio:#6a98f7;
+      --studio-bg:#edf3ff;
+      --warn:#b58b79;
+      --result-bg:#fff9f4;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Noto Sans JP", system-ui, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at right top, rgba(234,205,196,.52) 0 86px, transparent 87px),
+        radial-gradient(circle at left bottom, rgba(234,205,196,.36) 0 96px, transparent 97px),
+        var(--bg);
+      padding:28px;
+      line-height:1.7;
+    }
+    .wrap{
+      max-width:1220px;
+      margin:0 auto;
+      background:rgba(255,252,249,.62);
+      border:1px solid rgba(236,223,213,.92);
+      border-radius:24px;
+      padding:28px 28px 18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(2px);
+    }
+    .eyebrow{
+      margin:0 0 4px;
+      text-align:center;
+      font-family:"Cormorant Garamond", serif;
+      letter-spacing:.34em;
+      font-size:.92rem;
+      color:#b58d7d;
+    }
+    h1{
+      margin:0;
+      text-align:center;
+      font-size:clamp(2rem, 3.8vw, 3.15rem);
+      line-height:1.2;
+      color:#5f554f;
+      font-weight:800;
+    }
+    h1 .grad{
+      background:linear-gradient(135deg, #b98772, #dfb5a4 68%, #c79c8c);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .subline{
+      width:92px;
+      height:2px;
+      border-radius:999px;
+      background:#e8cabd;
+      margin:14px auto 14px;
+    }
+    .lead{
+      margin:0 auto 22px;
+      max-width:900px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.96rem;
+    }
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.7fr) minmax(300px,.95fr);
+      gap:18px;
+      align-items:start;
+    }
+    .panel{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+    .section-title{
+      margin:0 0 16px;
+      font-family:"Cormorant Garamond", serif;
+      letter-spacing:.22em;
+      font-size:.96rem;
+      color:#ba8d7f;
+      font-weight:600;
+    }
+    .section-title small{
+      font-family:"Noto Sans JP", sans-serif;
+      letter-spacing:.08em;
+      font-size:.82rem;
+      color:#cdb8ac;
+      margin-left:6px;
+    }
+    .question-groups{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+    .group{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 14px 10px;
+      background:#fffaf7;
+    }
+    .group h3{
+      margin:0 0 4px;
+      font-size:1rem;
+      color:#6b5c53;
+      line-height:1.45;
+    }
+    .group p{
+      margin:0 0 10px;
+      color:#998b82;
+      font-size:.82rem;
+      line-height:1.6;
+    }
+    .q-list{
+      display:grid;
+      gap:10px;
+    }
+    .q-item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      font-size:.94rem;
+      color:#6a5f57;
+    }
+    .q-item input{
+      margin-top:4px;
+      width:17px;
+      height:17px;
+      flex:none;
+      accent-color:#d1a594;
+    }
+    .q-item label{cursor:pointer}
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:.66rem;
+      line-height:1.3;
+      font-weight:700;
+      vertical-align:middle;
+      margin-left:7px;
+      letter-spacing:.02em;
+    }
+    .pill.note{background:var(--note-bg); color:#3a9382}
+    .pill.notion{background:var(--notion-bg); color:var(--notion)}
+    .pill.canva{background:var(--canva-bg); color:#7c61cf}
+    .pill.studio{background:var(--studio-bg); color:#4e78d1}
+    .rule{
+      margin-top:16px;
+      background:var(--accent-soft);
+      border-radius:999px;
+      text-align:center;
+      color:var(--warn);
+      padding:10px 16px;
+      font-size:.84rem;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+    button{
+      appearance:none;
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    button:hover{transform:translateY(-1px)}
+    .primary{
+      color:#fff;
+      background:linear-gradient(135deg, #d7ad9c, #c99484);
+      box-shadow:0 10px 18px rgba(201,148,132,.2);
+    }
+    .secondary{
+      color:#8b7063;
+      background:#f5ece6;
+    }
+    .footer-note{
+      margin-top:10px;
+      color:#9d8e85;
+      font-size:.8rem;
+    }
+    .result-copy{
+      margin:0 0 14px;
+      color:#6b5f57;
+      font-size:.95rem;
+      font-weight:700;
+    }
+    .result-list{
+      display:grid;
+      gap:10px;
+    }
+    .tool-card{
+      background:var(--result-bg);
+      border:1px solid var(--line);
+      border-left:4px solid transparent;
+      border-radius:16px;
+      padding:12px 14px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .tool-card.is-top{
+      transform:translateY(-1px);
+      box-shadow:0 10px 22px rgba(148,121,103,.13);
+    }
+    .tool-card.note{border-left-color:var(--note)}
+    .tool-card.notion{border-left-color:var(--notion)}
+    .tool-card.canva{border-left-color:var(--canva)}
+    .tool-card.studio{border-left-color:var(--studio)}
+    .tool-name{
+      margin:0 0 4px;
+      font-family:"Cormorant Garamond", serif;
+      font-size:1.8rem;
+      line-height:1;
+      font-weight:600;
+    }
+    .tool-meta{font-size:.8rem; color:#998b82}
+    .fit-label{
+      margin:0 0 3px;
+      text-align:right;
+      font-size:.9rem;
+      font-weight:800;
+    }
+    .fit-note{
+      text-align:right;
+      font-size:.74rem;
+      color:#9a8d84;
+    }
+    .note .tool-name,.note .fit-label{color:#3a9382}
+    .notion .tool-name,.notion .fit-label{color:#5f5852}
+    .canva .tool-name,.canva .fit-label{color:#7c61cf}
+    .studio .tool-name,.studio .fit-label{color:#4e78d1}
+    .score-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      margin-top:8px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#f8f1eb;
+      color:#a18f84;
+      font-size:.78rem;
+    }
+    .tool-desc{
+      margin-top:18px;
+      background:#fff9f4;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+    }
+    .tool-desc h3{
+      margin:0 0 8px;
+      font-size:1.02rem;
+      color:#6a5b53;
+    }
+    .tool-desc p{
+      margin:0 0 10px;
+      color:#7a6d65;
+      font-size:.92rem;
+    }
+    .tool-desc ul{
+      margin:0;
+      padding-left:1.2em;
+      color:#6f635b;
+      font-size:.9rem;
+    }
+    .tool-desc li{margin:0 0 6px}
+    .hidden{display:none !important}
+
+    @media (max-width: 980px){
+      body{padding:16px}
+      .wrap{padding:18px 16px 16px}
+      .layout{grid-template-columns:1fr}
+      .question-groups{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">FIND YOUR PORTFOLIO TOOL — SELF CHECK</p>
+    <h1>あなたに<span class="grad">最適なポートフォリオ用ツール</span>診断</h1>
+    <div class="subline"></div>
+    <p class="lead">当てはまるものにチェック ✓ — 4つの軸から立体的に判定。タグの合計が最も多いツールが、今のあなたに合うポートフォリオ用ツールです。</p>
+
+    <div class="layout">
+      <section class="panel">
+        <h2 class="section-title">QUESTIONS <small>/ 16</small></h2>
+        <div class="question-groups" id="questionGroups"></div>
+        <div class="rule">同点なら「更新のしやすさ」を優先。続けられるツール選びをいちばん大切にします。</div>
+        <div class="actions">
+          <button class="primary" id="resetBtn" type="button">診断をリセット</button>
+          <button class="secondary" id="copyBtn" type="button">結果文をコピー</button>
+        </div>
+        <p class="footer-note">※ HTML / CSS / JavaScriptだけで動くので、GitHub Pagesで無料公開できます。</p>
+      </section>
+
+      <aside class="panel">
+        <h2 class="section-title">RESULT</h2>
+        <p class="result-copy" id="summaryText">最多のツール = あなたの相性◎</p>
+        <div class="result-list" id="resultList"></div>
+        <div class="tool-desc" id="toolDesc"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const TOOL_META = {
+      note: {
+        label: 'note',
+        tagClass: 'note',
+        short: '語る人向き',
+        detail: 'SEO / 記事発信 / 企画・ライティング向け',
+        desc: '文章で信頼を積み上げたい人におすすめ。考え方・実績・経験を言語化しながら、検索流入にもつなげやすいのが強みです。',
+        bullets: ['ライティング・企画実績と相性が良い', 'SEO集客や記事蓄積に強い', '定期的に書ける人ほど育ちやすい']
+      },
+      notion: {
+        label: 'Notion',
+        tagClass: 'notion',
+        short: '整える人向き',
+        detail: '一覧化 / 複数業種 / 商談提示に強い',
+        desc: '複数のサービスや経歴を整理して見せたい人におすすめ。情報設計がしやすく、商談時のポートフォリオ提示にも向いています。',
+        bullets: ['複数ジャンルを1つに整理しやすい', '更新が手軽で続けやすい', '一覧性が高く、見せ方を整えやすい']
+      },
+      canva: {
+        label: 'Canva',
+        tagClass: 'canva',
+        short: '魅せる人向き',
+        detail: 'SNS / チラシ / PDF資料に強い',
+        desc: 'ビジュアル重視で見せたい人におすすめ。営業資料・提案資料・SNS実績などを、ひと目で伝わる形にまとめやすいです。',
+        bullets: ['画像・資料・LPデザインと相性が良い', 'PDF出力でそのまま営業資料にも使える', 'デザインの印象で魅せやすい']
+      },
+      studio: {
+        label: 'STUDIO',
+        tagClass: 'studio',
+        short: '創る人向き',
+        detail: 'Webサイト / LP制作 / 本格運用向け',
+        desc: '作品そのものをしっかり見せたい人におすすめ。独自ドメインで本格的に運用したい、世界観ごと見せたい人にぴったりです。',
+        bullets: ['Web制作実績をそのまま見せやすい', 'ブランド感のあるサイトを作れる', 'じっくり作り込むほど強みが出る']
+      }
+    };
+
+    const QUESTION_GROUPS = [
+      {
+        key:'A',
+        title:'A. 発信スタイル',
+        subtitle:'あなたの表現軸',
+        questions:[
+          { text:'文章で語るのが得意', tool:'note' },
+          { text:'写真・画像で魅せたい', tool:'canva' },
+          { text:'整理・体系化が好き', tool:'notion' },
+          { text:'作品そのものを見せたい', tool:'studio' }
+        ]
+      },
+      {
+        key:'B',
+        title:'B. 制作物のタイプ',
+        subtitle:'何を作っているか',
+        questions:[
+          { text:'ライティング・企画系を見せたい', tool:'note' },
+          { text:'SNS投稿・チラシ・LPを見せたい', tool:'canva' },
+          { text:'複数業種にまたがる実績をまとめたい', tool:'notion' },
+          { text:'Webサイト・LP制作を見せたい', tool:'studio' }
+        ]
+      },
+      {
+        key:'C',
+        title:'C. 更新のリズム',
+        subtitle:'続けられるペース',
+        questions:[
+          { text:'週1以上、記事を書ける', tool:'note' },
+          { text:'スマホからサッと更新したい', tool:'notion' },
+          { text:'1〜2ヶ月に1回の更新でOK', tool:'canva' },
+          { text:'じっくり作り込みたい', tool:'studio' }
+        ]
+      },
+      {
+        key:'D',
+        title:'D. 目指す方向性',
+        subtitle:'ゴール',
+        questions:[
+          { text:'SEO・検索流入で集客したい', tool:'note' },
+          { text:'クライアント商談で提示したい', tool:'notion' },
+          { text:'PDF出力して営業資料兼用にしたい', tool:'canva' },
+          { text:'独自ドメインで本格運用したい', tool:'studio' }
+        ]
+      }
+    ];
+
+    const questionGroupsEl = document.getElementById('questionGroups');
+    const resultListEl = document.getElementById('resultList');
+    const summaryTextEl = document.getElementById('summaryText');
+    const toolDescEl = document.getElementById('toolDesc');
+    const resetBtn = document.getElementById('resetBtn');
+    const copyBtn = document.getElementById('copyBtn');
+
+    function renderQuestions(){
+      let questionIndex = 0;
+      questionGroupsEl.innerHTML = QUESTION_GROUPS.map(group => `
+        <section class="group">
+          <h3>${group.title}</h3>
+          <p>${group.subtitle}</p>
+          <div class="q-list">
+            ${group.questions.map(q => {
+              const id = `q${questionIndex++}`;
+              return `
+                <div class="q-item">
+                  <input type="checkbox" id="${id}" data-tool="${q.tool}">
+                  <label for="${id}">${q.text}<span class="pill ${TOOL_META[q.tool].tagClass}">${TOOL_META[q.tool].label}</span></label>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `).join('');
+    }
+
+    function calculateScores(){
+      const scores = { note:0, notion:0, canva:0, studio:0 };
+      document.querySelectorAll('#questionGroups input[type="checkbox"]').forEach(el => {
+        if(el.checked) scores[el.dataset.tool] += 1;
+      });
+      return scores;
+    }
+
+    function ranking(scores){
+      const tieBreak = ['notion', 'canva', 'note', 'studio'];
+      return Object.entries(scores)
+        .sort((a,b) => b[1] - a[1] || tieBreak.indexOf(a[0]) - tieBreak.indexOf(b[0]));
+    }
+
+    function renderResults(){
+      const scores = calculateScores();
+      const ranked = ranking(scores);
+      const [topTool, topScore] = ranked[0];
+
+      summaryTextEl.textContent = topScore === 0
+        ? 'まだ未選択です — 当てはまるものにチェックしてみてください。'
+        : `最多のツール = ${TOOL_META[topTool].label}（${topScore} / 4軸）`;
+
+      resultListEl.innerHTML = ranked.map(([tool, score], index) => {
+        const meta = TOOL_META[tool];
+        const fitText = score === 0 ? '未診断' : score >= 3 ? 'かなり相性◎' : score >= 2 ? '相性あり' : '候補としてあり';
+        return `
+          <div class="tool-card ${meta.tagClass} ${index === 0 && topScore > 0 ? 'is-top' : ''}">
+            <div>
+              <p class="tool-name">${meta.label}</p>
+              <div class="tool-meta">${meta.detail}</div>
+              <div class="score-chip">一致数 ${score} / 4</div>
+            </div>
+            <div>
+              <p class="fit-label">${meta.short}</p>
+              <div class="fit-note">${fitText}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const meta = TOOL_META[topTool];
+      toolDescEl.innerHTML = topScore === 0 ? `
+        <h3>まずは気になる項目にチェックしてみよう</h3>
+        <p>4つの軸に答えるほど、あなたに合うポートフォリオ用ツールが見えやすくなります。</p>
+      ` : `
+        <h3>${meta.label} が今のあなたにおすすめ</h3>
+        <p>${meta.desc}</p>
+        <ul>${meta.bullets.map(item => `<li>${item}</li>`).join('')}</ul>
+      `;
+    }
+
+    function copyResult(){
+      const scores = calculateScores();
+      const ranked = ranking(scores);
+      const [topTool, topScore] = ranked[0];
+      const meta = TOOL_META[topTool];
+      const text = topScore === 0
+        ? 'まだ診断していません。気になる項目にチェックしてみてください。'
+        : `【ポートフォリオ用ツール診断】\n結果は「${meta.label}」でした。\n${meta.desc}\n\n#ポートフォリオ #ツール診断`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = 'コピーしました';
+        setTimeout(() => { copyBtn.textContent = '結果文をコピー'; }, 1200);
+      });
+    }
+
+    renderQuestions();
+    renderResults();
+    questionGroupsEl.addEventListener('change', renderResults);
+    resetBtn.addEventListener('click', () => {
+      document.querySelectorAll('#questionGroups input').forEach(el => { el.checked = false; });
+      renderResults();
+    });
+    copyBtn.addEventListener('click', copyResult);
+  </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+</body>
+</html>
