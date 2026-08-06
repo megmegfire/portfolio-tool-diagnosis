@@ -455,12 +455,12 @@
       <p class="eyebrow">FIND YOUR PORTFOLIO TOOL — SELF CHECK</p>
       <h1>あなたに<span class="grad">最適なポートフォリオ用ツール</span>診断</h1>
       <div class="subline"></div>
-      <p class="lead">4つの軸から立体的に判定。最後に、今のあなたに合うポートフォリオ用ツールが表示されます。</p>
+      <p class="lead">4つの質問から立体的に判定。最後に、今のあなたに合うポートフォリオ用ツールが表示されます。</p>
 
       <div class="intro-grid">
         <div class="intro-item">
           <div class="label">設問数</div>
-          <div class="value">全16問</div>
+          <div class="value">全4問</div>
         </div>
         <div class="intro-item">
           <div class="label">ページ数</div>
@@ -478,8 +478,8 @@
 
       <div class="notice">
         <p>💡 当てはまるものを自由にチェックしてください。</p>
-        <p>4つの軸（発信スタイル / 制作物のタイプ / 更新のリズム / 目指す方向性）から判定します。</p>
-        <p>同点なら「更新のしやすさ」を優先して、続けやすいツールをおすすめします。</p>
+        <p>使えるツール、作品の傾向、見せ方、流入経路の4つの質問から判定します。</p>
+        <p>「STUDIO」が選ばれた場合はSTUDIOを優先し、「どのツールも自信ない」はnoteを優先して判定します。</p>
       </div>
 
       <button class="start-btn" id="startBtn" type="button">診断スタート</button>
@@ -497,7 +497,7 @@
         <span id="answerInfo"></span>
       </div>
       <div id="questionArea"></div>
-      <div class="rule">同点なら「更新のしやすさ」を優先。続けられるツール選びをいちばん大切にします。</div>
+      <div class="rule">Q1は使えるツールの確認です。同点なら「更新のしやすさ」を優先して判定します。</div>
       <div class="btn-row">
         <button class="btn ghost" id="prevBtn" type="button">戻る</button>
         <button class="btn primary" id="nextBtn" type="button">次へ</button>
@@ -509,12 +509,12 @@
       <div class="quiz-header">
         <p class="eyebrow">YOUR RESULT</p>
         <h2 class="quiz-title">診断結果</h2>
-        <p class="quiz-sub">最後まで答えた結果、今のあなたに合うツールはこちらです</p>
+        <p class="quiz-sub">4つの質問への回答から、今のあなたに合うツールを表示します</p>
       </div>
 
       <div class="result-hero">
         <h3 id="summaryText">最多のツール = あなたの相性◎</h3>
-        <p>4つの軸をもとに、続けやすさまで含めて判定しています。</p>
+        <p>4つの質問と、今使えるツールの状況も含めて判定しています。</p>
       </div>
 
       <div class="result-list" id="resultList"></div>
@@ -539,90 +539,103 @@
   </div>
 
   <script>
+    const TOOL_ORDER = ['note', 'notion', 'canva', 'studio'];
+    const TIE_BREAK = ['note', 'notion', 'canva', 'studio'];
+    const MAX_SCORE_PER_TOOL = 5;
+
     const TOOL_META = {
       note: {
         label: 'note',
         tagClass: 'note',
-        short: '語る人向き',
-        detail: 'SEO / 記事発信 / 企画・ライティング向け',
-        desc: '文章で信頼を積み上げたい人におすすめ。考え方・実績・経験を言語化しながら、検索流入にもつなげやすいのが強みです。',
-        bullets: ['ライティング・企画実績と相性が良い', 'SEO集客や記事蓄積に強い', '定期的に書ける人ほど育ちやすい']
+        catch: '文章も作品も見せたい人向け',
+        detail: '文章＋作品表示 / テキストSNS流入 / 一枚絵向き',
+        summary: '文章を添えながら作品を見せたい気持ちが強く、ThreadsやXなどのテキスト系SNSからの流入とも相性が良いタイプです。',
+        fitPoints: ['文章も添えて見せたい', 'テキスト系SNSから流入を狙いたい', '作品数は比較的少なめ', '一枚絵の実績と相性が良い'],
+        caution: '作品数が多すぎるとスクロール負荷が上がりやすいです。PDFはそのまま埋め込むより、画像表示やダウンロード導線の方が見やすい場合があります。'
       },
       notion: {
         label: 'Notion',
         tagClass: 'notion',
-        short: '整える人向き',
-        detail: '一覧化 / 複数業種 / 商談提示に強い',
-        desc: '複数のサービスや経歴を整理して見せたい人におすすめ。情報設計がしやすく、商談時のポートフォリオ提示にも向いています。',
-        bullets: ['複数ジャンルを1つに整理しやすい', '更新が手軽で続けやすい', '一覧性が高く、見せ方を整えやすい']
+        catch: '整理して一覧で見せたい人向け',
+        detail: 'カテゴリ整理 / 一覧提示 / 複数ジャンル向き',
+        summary: '複数ジャンルの実績をカテゴリごとに整理して、シンプルかつ見やすく見せたいタイプです。クライアント面談時の一覧提示とも相性が良いです。',
+        fitPoints: ['複数ジャンルの実績がある', 'カテゴリごとに整理したい', '一覧で分かりやすく見せたい', '面談時に見せやすい形にしたい'],
+        caution: 'Notionをまったく触ったことがない場合は、最初の操作でつまずく可能性があります。ある程度使ったことがある人向きです。'
       },
       canva: {
         label: 'Canva',
         tagClass: 'canva',
-        short: '魅せる人向き',
-        detail: 'SNS / チラシ / PDF資料に強い',
-        desc: 'ビジュアル重視で見せたい人におすすめ。営業資料・提案資料・SNS実績などを、ひと目で伝わる形にまとめやすいです。',
-        bullets: ['画像・資料・LPデザインと相性が良い', 'PDF出力でそのまま営業資料にも使える', 'デザインの印象で魅せやすい']
+        catch: '世界観とオリジナリティを出したい人向け',
+        detail: '資料系実績 / Instagram導線 / デザイン重視',
+        summary: '自分らしさやかわいさ、世界観を含めて見せたいタイプです。資料系の実績やInstagram導線との相性も良いです。',
+        fitPoints: ['世界観やオリジナリティを出したい', '資料系の作品が多い', 'Instagram導線を活かしたい', '見た目の印象を大事にしたい'],
+        caution: '無料プランには制限があります。自由度が高い分、作り込みに時間がかかることがあります。Canvaに慣れている人ほど進めやすいです。'
       },
       studio: {
         label: 'STUDIO',
         tagClass: 'studio',
-        short: '創る人向き',
-        detail: 'Webサイト / LP制作 / 本格運用向け',
-        desc: '作品そのものをしっかり見せたい人におすすめ。独自ドメインで本格的に運用したい、世界観ごと見せたい人にぴったりです。',
-        bullets: ['Web制作実績をそのまま見せやすい', 'ブランド感のあるサイトを作れる', 'じっくり作り込むほど強みが出る']
+        catch: 'サイト自体を実績として見せたい人向け',
+        detail: 'Web制作受注 / サイト実績化 / 本格運用向き',
+        summary: 'ポートフォリオそのものを実績として見せたいタイプです。Web制作の受注につなげたい人や、サイトでスキル証明をしたい人に向いています。',
+        fitPoints: ['Web制作の受注につなげたい', 'サイト自体を実績として見せたい', 'STUDIO経験を活かしたい', '本格感を出したい'],
+        caution: 'STUDIOを触ったことがない人が、最初のポートフォリオ作成としていきなり選ぶのはややハードル高めです。まずはnoteなどで仮公開して、あとからSTUDIOを整える形でもOKです。'
       }
     };
 
-    const GROUPS = [
+    const QUESTIONS = [
       {
-        key:'A',
-        title:'A. 発信スタイル',
-        subtitle:'あなたの表現軸',
-        questions:[
-          { text:'文章で語るのが得意', tool:'note' },
-          { text:'写真・画像で魅せたい', tool:'canva' },
-          { text:'整理・体系化が好き', tool:'notion' },
-          { text:'作品そのものを見せたい', tool:'studio' }
+        id: 'q1',
+        title: 'Q1. ある程度使えると思うツールはありますか？',
+        description: '当てはまるものをすべて選んでください',
+        multi: true,
+        exclusiveOptionId: 'no_confidence',
+        options: [
+          { id: 'note', label: 'note', scores: { note: 2 } },
+          { id: 'notion', label: 'Notion', scores: { notion: 2 } },
+          { id: 'canva', label: 'Canva', scores: { canva: 2 } },
+          { id: 'studio', label: 'STUDIO', scores: { studio: 2 }, forceResult: 'studio' },
+          { id: 'no_confidence', label: 'どのツールも自信ない', forceResult: 'note' }
         ]
       },
       {
-        key:'B',
-        title:'B. 制作物のタイプ',
-        subtitle:'何を作っているか',
-        questions:[
-          { text:'ライティング・企画系を見せたい', tool:'note' },
-          { text:'SNS投稿・チラシ・LPを見せたい', tool:'canva' },
-          { text:'複数業種にまたがる実績をまとめたい', tool:'notion' },
-          { text:'Webサイト・LP制作を見せたい', tool:'studio' }
+        id: 'q2',
+        title: 'Q2. 自分の作品の傾向は？',
+        description: '当てはまるものをすべて選んでください',
+        multi: true,
+        options: [
+          { id: 'single_visual', label: 'チラシ、ポスター、サムネイル、図解などの一枚絵が多い', scores: { note: 1 } },
+          { id: 'documents', label: 'セミナー資料、営業資料などの資料が多い', scores: { canva: 1 } },
+          { id: 'multi_category', label: '複数ジャンルにまたがる実績が多い', scores: { notion: 1 } },
+          { id: 'web_lp', label: 'Webサイト、LP制作などが多い', scores: { studio: 1 } }
         ]
       },
       {
-        key:'C',
-        title:'C. 更新のリズム',
-        subtitle:'続けられるペース',
-        questions:[
-          { text:'週1以上、記事を書ける', tool:'note' },
-          { text:'スマホからサッと更新したい', tool:'notion' },
-          { text:'1〜2ヶ月に1回の更新でOK', tool:'canva' },
-          { text:'じっくり作り込みたい', tool:'studio' }
+        id: 'q3',
+        title: 'Q3. 作品数と見せ方は？',
+        description: '当てはまるものをすべて選んでください',
+        multi: true,
+        options: [
+          { id: 'under10_with_text', label: '作品数は10以下で、文章も添えて見せたい', scores: { note: 1 } },
+          { id: 'many_and_organized', label: '作品数が多く、カテゴリで整理して見せたい', scores: { notion: 1 } },
+          { id: 'visual_worldview', label: 'ビジュアル重視で、世界観を作りたい', scores: { canva: 1 } },
+          { id: 'site_is_work', label: 'サイト自体を実績として見せたい', scores: { studio: 1 } }
         ]
       },
       {
-        key:'D',
-        title:'D. 目指す方向性',
-        subtitle:'ゴール',
-        questions:[
-          { text:'SEO・検索流入で集客したい', tool:'note' },
-          { text:'クライアント商談で提示したい', tool:'notion' },
-          { text:'PDF出力して営業資料兼用にしたい', tool:'canva' },
-          { text:'独自ドメインで本格運用したい', tool:'studio' }
+        id: 'q4',
+        title: 'Q4. 見せたい相手や流入経路は？',
+        description: '当てはまるものをすべて選んでください',
+        multi: true,
+        options: [
+          { id: 'text_sns', label: 'ThreadsやXなど、テキストメインのSNSから流入させたい', scores: { note: 1 } },
+          { id: 'client_meeting', label: 'クライアント面談時に一覧で提示したい', scores: { notion: 1 } },
+          { id: 'instagram_link', label: 'InstagramのストーリーズやプロフィールURLに置いておきたい', scores: { canva: 1 } },
+          { id: 'web_orders', label: 'Web制作の受注につなげたい', scores: { studio: 1 } }
         ]
       }
     ];
 
-    const TIE_BREAK = ['notion', 'canva', 'note', 'studio'];
-    const answers = Array.from({ length: GROUPS.length }, () => []);
+    const answers = Object.fromEntries(QUESTIONS.map(q => [q.id, []]));
     let currentPage = 0;
 
     const startScreen = document.getElementById('startScreen');
@@ -643,23 +656,46 @@
     const toolDesc = document.getElementById('toolDesc');
     const scoreTableBody = document.querySelector('#scoreTable tbody');
 
-    function renderPage(){
-      const group = GROUPS[currentPage];
-      progressFill.style.width = `${((currentPage + 1) / GROUPS.length) * 100}%`;
-      pageInfo.textContent = `${currentPage + 1} / ${GROUPS.length} ページ`;
-      answerInfo.textContent = `このページ：${answers[currentPage].length} / ${group.questions.length} 選択中`;
+    function getCurrentQuestion() {
+      return QUESTIONS[currentPage];
+    }
+
+    function getSelectedCount() {
+      return QUESTIONS.reduce((total, q) => total + (answers[q.id] || []).length, 0);
+    }
+
+    function collectCurrentAnswers() {
+      const question = getCurrentQuestion();
+      if (!question) return;
+
+      let selected = Array.from(questionArea.querySelectorAll('input[type="checkbox"]:checked'))
+        .map(el => el.dataset.optionId);
+
+      if (question.exclusiveOptionId && selected.includes(question.exclusiveOptionId) && selected.length > 1) {
+        selected = [question.exclusiveOptionId];
+      }
+
+      answers[question.id] = selected;
+      answerInfo.textContent = `選択中：${selected.length}件`;
+    }
+
+    function renderPage() {
+      const question = getCurrentQuestion();
+      progressFill.style.width = `${((currentPage + 1) / QUESTIONS.length) * 100}%`;
+      pageInfo.textContent = `${currentPage + 1} / ${QUESTIONS.length} ページ`;
+      answerInfo.textContent = `選択中：${(answers[question.id] || []).length}件`;
 
       questionArea.innerHTML = `
         <section class="group-card">
-          <h3>${group.title}</h3>
-          <p>${group.subtitle}</p>
+          <h3>${question.title}</h3>
+          <p>${question.description}</p>
           <div class="q-list">
-            ${group.questions.map((q, index) => {
-              const checked = answers[currentPage].includes(index) ? 'checked' : '';
+            ${question.options.map(option => {
+              const checked = (answers[question.id] || []).includes(option.id) ? 'checked' : '';
               return `
                 <div class="q-item">
-                  <input type="checkbox" id="q-${currentPage}-${index}" data-index="${index}" ${checked}>
-                  <label for="q-${currentPage}-${index}">${q.text}</label>
+                  <input type="checkbox" id="${question.id}-${option.id}" data-option-id="${option.id}" ${checked}>
+                  <label for="${question.id}-${option.id}">${option.label}</label>
                 </div>
               `;
             }).join('')}
@@ -668,75 +704,146 @@
       `;
 
       prevBtn.disabled = currentPage === 0;
-      nextBtn.classList.toggle('hidden', currentPage === GROUPS.length - 1);
-      submitBtn.classList.toggle('hidden', currentPage !== GROUPS.length - 1);
+      nextBtn.classList.toggle('hidden', currentPage === QUESTIONS.length - 1);
+      submitBtn.classList.toggle('hidden', currentPage !== QUESTIONS.length - 1);
     }
 
-    function collectCurrentAnswers(){
-      answers[currentPage] = Array.from(questionArea.querySelectorAll('input[type="checkbox"]:checked'))
-        .map(el => Number(el.dataset.index));
-      answerInfo.textContent = `このページ：${answers[currentPage].length} / ${GROUPS[currentPage].questions.length} 選択中`;
-    }
-
-    function calculateScores(){
-      const scores = { note:0, notion:0, canva:0, studio:0 };
-      GROUPS.forEach((group, pageIdx) => {
-        answers[pageIdx].forEach(qIdx => {
-          const tool = group.questions[qIdx].tool;
-          scores[tool] += 1;
+    function getOptionMap() {
+      const map = {};
+      QUESTIONS.forEach(question => {
+        question.options.forEach(option => {
+          map[option.id] = option;
         });
       });
+      return map;
+    }
+
+    function calculateScores() {
+      const optionMap = getOptionMap();
+      const scores = { note: 0, notion: 0, canva: 0, studio: 0 };
+
+      Object.values(answers).forEach(selected => {
+        selected.forEach(optionId => {
+          const option = optionMap[optionId];
+          if (!option || !option.scores) return;
+          Object.entries(option.scores).forEach(([tool, value]) => {
+            scores[tool] += value;
+          });
+        });
+      });
+
       return scores;
     }
 
-    function rankScores(scores){
-      return Object.entries(scores)
-        .sort((a,b) => b[1] - a[1] || TIE_BREAK.indexOf(a[0]) - TIE_BREAK.indexOf(b[0]));
+    function rankScores(scores, forcedPrimary = null) {
+      const ranked = Object.entries(scores)
+        .sort((a, b) => b[1] - a[1] || TIE_BREAK.indexOf(a[0]) - TIE_BREAK.indexOf(b[0]));
+
+      if (!forcedPrimary) return ranked;
+
+      const forcedEntry = ranked.find(([tool]) => tool === forcedPrimary) || [forcedPrimary, scores[forcedPrimary] || 0];
+      const rest = ranked.filter(([tool]) => tool !== forcedPrimary);
+      return [forcedEntry, ...rest];
     }
 
-    function renderResult(){
+    function calculateDiagnosis() {
+      const q1Answers = answers.q1 || [];
       const scores = calculateScores();
-      const ranked = rankScores(scores);
-      const [topTool, topScore] = ranked[0];
-      const meta = TOOL_META[topTool];
+      let forcedPrimary = null;
+      let forceReason = '';
 
-      summaryText.textContent = topScore === 0
-        ? '未回答のため、まだ判定できません。'
-        : `あなたに最適なのは「${meta.label}」です（${topScore} / 16一致）`;
+      if (q1Answers.includes('studio')) {
+        forcedPrimary = 'studio';
+        forceReason = 'Q1で「STUDIO」が選ばれたため、STUDIOを優先して判定しています。';
+      } else if (q1Answers.includes('no_confidence')) {
+        forcedPrimary = 'note';
+        forceReason = 'Q1で「どのツールも自信ない」が選ばれたため、始めやすさを優先してnoteをおすすめしています。';
+      }
+
+      const ranked = rankScores(scores, forcedPrimary);
+      const primary = ranked[0][0];
+      const secondary = ranked[1] && ranked[1][1] > 0 ? ranked[1][0] : null;
+
+      return {
+        scores,
+        ranked,
+        primary,
+        secondary,
+        forced: Boolean(forcedPrimary),
+        forceReason,
+        totalSelected: getSelectedCount()
+      };
+    }
+
+    function renderResult() {
+      const result = calculateDiagnosis();
+      const { primary, secondary, ranked, scores, forced, forceReason, totalSelected } = result;
+      const primaryMeta = TOOL_META[primary];
+      const secondaryMeta = secondary ? TOOL_META[secondary] : null;
+
+      if (totalSelected === 0) {
+        summaryText.textContent = 'まだ診断結果はありません';
+      } else if (secondaryMeta && !forced) {
+        summaryText.textContent = `第一候補は「${primaryMeta.label}」、第二候補は「${secondaryMeta.label}」です`;
+      } else {
+        summaryText.textContent = `あなたに合うツールは「${primaryMeta.label}」です`;
+      }
 
       resultList.innerHTML = ranked.map(([tool, score], index) => {
         const item = TOOL_META[tool];
-        const fitText = score === 0 ? '未診断' : score >= 4 ? 'かなり相性◎' : score >= 2 ? '相性あり' : '候補としてあり';
+        let fitText = '今回の傾向では低め';
+        if (totalSelected === 0) {
+          fitText = '未診断';
+        } else if (forced && tool === primary) {
+          fitText = '優先判定';
+        } else if (score >= 4) {
+          fitText = 'かなり相性◎';
+        } else if (score >= 2) {
+          fitText = '相性あり';
+        } else if (score >= 1) {
+          fitText = '候補としてあり';
+        }
+
         return `
-          <div class="tool-card ${item.tagClass} ${index === 0 && topScore > 0 ? 'is-top' : ''}">
+          <div class="tool-card ${item.tagClass} ${index === 0 && totalSelected > 0 ? 'is-top' : ''}">
             <div>
               <p class="tool-name">${item.label}</p>
               <div class="tool-meta">${item.detail}</div>
-              <div class="score-chip">一致数 ${score} / 16</div>
+              <div class="score-chip">一致数 ${score} / ${MAX_SCORE_PER_TOOL}</div>
             </div>
             <div>
-              <p class="fit-label">${item.short}</p>
+              <p class="fit-label">${item.catch}</p>
               <div class="fit-note">${fitText}</div>
             </div>
           </div>
         `;
       }).join('');
 
-      toolDesc.innerHTML = topScore === 0 ? `
-        <h4>まずは気になる項目にチェックしてみよう</h4>
-        <p>4つの軸に答えるほど、あなたに合うポートフォリオ用ツールが見えやすくなります。</p>
-      ` : `
-        <h4>${meta.label} が今のあなたにおすすめ</h4>
-        <p>${meta.desc}</p>
-        <ul>${meta.bullets.map(item => `<li>${item}</li>`).join('')}</ul>
-      `;
+      if (totalSelected === 0) {
+        toolDesc.innerHTML = `
+          <h4>まずは気になるものを選んでみましょう</h4>
+          <p>4つの質問に答えるほど、今のあなたに合うポートフォリオ用ツールが見えやすくなります。</p>
+        `;
+      } else {
+        toolDesc.innerHTML = `
+          <h4>${primaryMeta.label} が第一候補です</h4>
+          <p>${primaryMeta.summary}</p>
+          ${forced ? `<p>${forceReason}</p>` : ''}
+          ${secondaryMeta ? `<p><strong>第二候補は ${secondaryMeta.label}</strong>。${secondaryMeta.summary}</p>` : ''}
+          <p><strong>向いているポイント</strong></p>
+          <ul>${primaryMeta.fitPoints.map(item => `<li>${item}</li>`).join('')}</ul>
+          <p><strong>注意点</strong></p>
+          <p>${primaryMeta.caution}</p>
+          <p>同点の場合は、更新しやすさを優先して判定しています。</p>
+        `;
+      }
 
       scoreTableBody.innerHTML = ranked.map(([tool, score]) => {
-        const pct = Math.round((score / 16) * 100);
+        const pct = Math.round((score / MAX_SCORE_PER_TOOL) * 100);
         return `
           <tr>
             <td>${TOOL_META[tool].label}</td>
-            <td>${score} / 16</td>
+            <td>${score} / ${MAX_SCORE_PER_TOOL}</td>
             <td>
               <div class="bar"><div style="width:${pct}%"></div></div>
             </td>
@@ -745,7 +852,7 @@
       }).join('');
     }
 
-    function startQuiz(){
+    function startQuiz() {
       startScreen.classList.add('hidden');
       resultScreen.classList.add('hidden');
       quizScreen.classList.remove('hidden');
@@ -754,7 +861,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function showResult(){
+    function showResult() {
       collectCurrentAnswers();
       quizScreen.classList.add('hidden');
       resultScreen.classList.remove('hidden');
@@ -762,8 +869,10 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function resetDiagnosis(){
-      for(let i=0;i<answers.length;i++) answers[i] = [];
+    function resetDiagnosis() {
+      QUESTIONS.forEach(question => {
+        answers[question.id] = [];
+      });
       currentPage = 0;
       resultScreen.classList.add('hidden');
       quizScreen.classList.add('hidden');
@@ -771,14 +880,29 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function copyResultText(){
-      const scores = calculateScores();
-      const ranked = rankScores(scores);
-      const [topTool, topScore] = ranked[0];
-      const meta = TOOL_META[topTool];
-      const text = topScore === 0
-        ? 'まだ診断結果はありません。'
-        : `【ポートフォリオ用ツール診断】\n私に合うツールは「${meta.label}」でした。\n${meta.desc}\n\n#ポートフォリオ #ツール診断`;
+    function copyResultText() {
+      const result = calculateDiagnosis();
+      const { primary, secondary, forced, forceReason, totalSelected } = result;
+      if (totalSelected === 0) {
+        navigator.clipboard.writeText('まだ診断結果はありません。').then(() => {
+          copyBtn.textContent = 'コピーしました';
+          setTimeout(() => { copyBtn.textContent = '結果文をコピー'; }, 1200);
+        });
+        return;
+      }
+
+      const primaryMeta = TOOL_META[primary];
+      const secondaryMeta = secondary ? TOOL_META[secondary] : null;
+      const text = [
+        '【ポートフォリオ用ツール診断】',
+        `第一候補：${primaryMeta.label}`,
+        secondaryMeta ? `第二候補：${secondaryMeta.label}` : '',
+        primaryMeta.summary,
+        forced ? forceReason : '',
+        '#ポートフォリオ #ツール診断'
+      ].filter(Boolean).join('
+');
+
       navigator.clipboard.writeText(text).then(() => {
         copyBtn.textContent = 'コピーしました';
         setTimeout(() => { copyBtn.textContent = '結果文をコピー'; }, 1200);
@@ -788,18 +912,39 @@
     startBtn.addEventListener('click', startQuiz);
     prevBtn.addEventListener('click', () => {
       collectCurrentAnswers();
-      if(currentPage === 0) return;
+      if (currentPage === 0) return;
       currentPage -= 1;
       renderPage();
     });
     nextBtn.addEventListener('click', () => {
       collectCurrentAnswers();
-      if(currentPage >= GROUPS.length - 1) return;
+      if (currentPage >= QUESTIONS.length - 1) return;
       currentPage += 1;
       renderPage();
     });
     submitBtn.addEventListener('click', showResult);
-    questionArea.addEventListener('change', collectCurrentAnswers);
+    questionArea.addEventListener('change', event => {
+      const question = getCurrentQuestion();
+      if (!question || !event.target.matches('input[type="checkbox"]')) {
+        collectCurrentAnswers();
+        return;
+      }
+
+      if (question.exclusiveOptionId) {
+        const exclusive = questionArea.querySelector(`input[data-option-id="${question.exclusiveOptionId}"]`);
+        const target = event.target;
+
+        if (target.dataset.optionId === question.exclusiveOptionId && target.checked) {
+          questionArea.querySelectorAll('input[type="checkbox"]').forEach(input => {
+            if (input !== target) input.checked = false;
+          });
+        } else if (target.checked && exclusive) {
+          exclusive.checked = false;
+        }
+      }
+
+      collectCurrentAnswers();
+    });
     retryBtn.addEventListener('click', resetDiagnosis);
     copyBtn.addEventListener('click', copyResultText);
   </script>
