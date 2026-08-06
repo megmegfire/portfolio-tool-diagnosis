@@ -659,7 +659,7 @@
               return `
                 <div class="q-item">
                   <input type="checkbox" id="q-${currentPage}-${index}" data-index="${index}" ${checked}>
-                  <label for="q-${currentPage}-${index}">${q.text}<span class="pill ${TOOL_META[q.tool].tagClass}">${TOOL_META[q.tool].label}</span></label>
+                  <label for="q-${currentPage}-${index}">${q.text}</label>
                 </div>
               `;
             }).join('')}
@@ -803,5 +803,6 @@
     retryBtn.addEventListener('click', resetDiagnosis);
     copyBtn.addEventListener('click', copyResultText);
   </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body>
 </html>
