@@ -16,6 +16,7 @@
       --line:#ecdfd5;
       --shadow:0 16px 40px rgba(160,132,116,.10);
       --accent:#c69a86;
+      --accent-strong:#bf8f7a;
       --accent-soft:#f5e8e0;
       --note:#76cdbd;
       --note-bg:#ebfaf6;
@@ -27,6 +28,7 @@
       --studio-bg:#edf3ff;
       --warn:#b58b79;
       --result-bg:#fff9f4;
+      --good:#8f6d60;
     }
     *{box-sizing:border-box}
     body{
@@ -41,12 +43,12 @@
       line-height:1.7;
     }
     .wrap{
-      max-width:1220px;
+      max-width:940px;
       margin:0 auto;
       background:rgba(255,252,249,.62);
       border:1px solid rgba(236,223,213,.92);
-      border-radius:24px;
-      padding:28px 28px 18px;
+      border-radius:26px;
+      padding:28px;
       box-shadow:var(--shadow);
       backdrop-filter:blur(2px);
     }
@@ -61,7 +63,7 @@
     h1{
       margin:0;
       text-align:center;
-      font-size:clamp(2rem, 3.8vw, 3.15rem);
+      font-size:clamp(2rem, 4vw, 3.15rem);
       line-height:1.2;
       color:#5f554f;
       font-weight:800;
@@ -81,18 +83,13 @@
     }
     .lead{
       margin:0 auto 22px;
-      max-width:900px;
+      max-width:760px;
       text-align:center;
       color:var(--muted);
       font-size:.96rem;
     }
-    .layout{
-      display:grid;
-      grid-template-columns:minmax(0,1.7fr) minmax(300px,.95fr);
-      gap:18px;
-      align-items:start;
-    }
-    .panel{
+    .hidden{display:none !important}
+    .card{
       background:var(--paper);
       border:1px solid var(--line);
       border-radius:22px;
@@ -114,28 +111,134 @@
       color:#cdb8ac;
       margin-left:6px;
     }
-    .question-groups{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
+
+    /* start */
+    #startScreen{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      align-items:center;
+      text-align:center;
     }
-    .group{
+    .intro-grid{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:10px;
+    }
+    .intro-item{
+      background:#fffaf7;
       border:1px solid var(--line);
       border-radius:18px;
-      padding:14px 14px 10px;
-      background:#fffaf7;
+      padding:14px 12px;
     }
-    .group h3{
-      margin:0 0 4px;
-      font-size:1rem;
+    .intro-item .label{
+      font-size:.76rem;
+      color:var(--muted);
+      margin-bottom:4px;
+    }
+    .intro-item .value{
+      font-size:.96rem;
+      font-weight:700;
       color:#6b5c53;
-      line-height:1.45;
     }
-    .group p{
-      margin:0 0 10px;
-      color:#998b82;
-      font-size:.82rem;
-      line-height:1.6;
+    .notice{
+      width:100%;
+      background:#faf5f0;
+      border:1px solid #e8ddd5;
+      border-radius:18px;
+      padding:16px 18px;
+      text-align:left;
+      color:#7b6a60;
+      font-size:.93rem;
+    }
+    .notice p{margin:0 0 6px}
+    .notice p:last-child{margin:0}
+    .start-btn,
+    .btn{
+      appearance:none;
+      border:none;
+      border-radius:999px;
+      padding:14px 22px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      transition:.15s ease;
+      touch-action:manipulation;
+    }
+    .start-btn,
+    .btn.primary{
+      color:#fff;
+      background:linear-gradient(135deg, #d7ad9c, #c99484);
+      box-shadow:0 10px 18px rgba(201,148,132,.2);
+    }
+    .btn.secondary{
+      color:#8b7063;
+      background:#f5ece6;
+    }
+    .btn.ghost{
+      color:#92786d;
+      background:#fff;
+      border:1px solid var(--line);
+    }
+    .start-btn:hover,.btn:hover{transform:translateY(-1px)}
+
+    /* quiz */
+    .quiz-header{
+      text-align:center;
+      margin-bottom:16px;
+    }
+    .quiz-title{
+      margin:0;
+      font-size:1.55rem;
+      color:#645850;
+      font-weight:800;
+    }
+    .quiz-sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+    .progress{
+      margin:12px 0 8px;
+      width:100%;
+      height:11px;
+      border-radius:999px;
+      background:#f1e7e1;
+      overflow:hidden;
+    }
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg, #dfb5a4, #c69a86);
+      border-radius:999px;
+      transition:width .25s ease;
+    }
+    .page-meta{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      color:#8d8178;
+      font-size:.9rem;
+      margin-bottom:18px;
+      flex-wrap:wrap;
+    }
+    .group-card{
+      background:#fffaf7;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:14px;
+    }
+    .group-card h3{
+      margin:0 0 4px;
+      font-size:1.08rem;
+      color:#6a5c54;
+    }
+    .group-card p{
+      margin:0 0 12px;
+      color:#9a8c84;
+      font-size:.85rem;
     }
     .q-list{
       display:grid;
@@ -145,8 +248,12 @@
       display:flex;
       gap:10px;
       align-items:flex-start;
-      font-size:.94rem;
+      font-size:.96rem;
       color:#6a5f57;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 14px;
     }
     .q-item input{
       margin-top:4px;
@@ -173,7 +280,7 @@
     .pill.canva{background:var(--canva-bg); color:#7c61cf}
     .pill.studio{background:var(--studio-bg); color:#4e78d1}
     .rule{
-      margin-top:16px;
+      margin-top:14px;
       background:var(--accent-soft);
       border-radius:999px;
       text-align:center;
@@ -181,42 +288,39 @@
       padding:10px 16px;
       font-size:.84rem;
     }
-    .actions{
+    .btn-row{
       display:flex;
       gap:10px;
-      flex-wrap:wrap;
       margin-top:16px;
     }
-    button{
-      appearance:none;
-      border:none;
-      border-radius:999px;
-      padding:12px 18px;
-      font:inherit;
-      font-weight:700;
-      cursor:pointer;
-      transition:.15s ease;
-    }
-    button:hover{transform:translateY(-1px)}
-    .primary{
-      color:#fff;
-      background:linear-gradient(135deg, #d7ad9c, #c99484);
-      box-shadow:0 10px 18px rgba(201,148,132,.2);
-    }
-    .secondary{
-      color:#8b7063;
-      background:#f5ece6;
-    }
-    .footer-note{
-      margin-top:10px;
-      color:#9d8e85;
-      font-size:.8rem;
-    }
+    .btn-row .btn{flex:1}
+
+    /* result */
     .result-copy{
-      margin:0 0 14px;
+      margin:0 0 12px;
       color:#6b5f57;
-      font-size:.95rem;
+      font-size:.96rem;
       font-weight:700;
+      text-align:center;
+    }
+    .result-hero{
+      background:#fff9f4;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      margin-bottom:16px;
+    }
+    .result-hero h3{
+      margin:0 0 6px;
+      font-size:1.25rem;
+      text-align:center;
+      color:#6a5b53;
+    }
+    .result-hero p{
+      margin:0;
+      text-align:center;
+      color:#85776f;
+      font-size:.92rem;
     }
     .result-list{
       display:grid;
@@ -277,13 +381,13 @@
       font-size:.78rem;
     }
     .tool-desc{
-      margin-top:18px;
+      margin-top:16px;
       background:#fff9f4;
       border:1px solid var(--line);
       border-radius:18px;
       padding:16px;
     }
-    .tool-desc h3{
+    .tool-desc h4{
       margin:0 0 8px;
       font-size:1.02rem;
       color:#6a5b53;
@@ -300,42 +404,138 @@
       font-size:.9rem;
     }
     .tool-desc li{margin:0 0 6px}
-    .hidden{display:none !important}
+    .score-table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:14px;
+      font-size:.92rem;
+    }
+    .score-table th,.score-table td{
+      border-bottom:1px solid var(--line);
+      padding:10px 8px;
+      text-align:left;
+    }
+    .score-table th{color:#9a8e85;font-weight:700}
+    .bar{
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:#f0e7e1;
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      background:linear-gradient(90deg, #dfb5a4, #c69a86);
+      border-radius:999px;
+    }
+    .result-actions{
+      display:flex;
+      gap:10px;
+      margin-top:16px;
+      flex-wrap:wrap;
+    }
+    .result-actions .btn{flex:1}
 
-    @media (max-width: 980px){
-      body{padding:16px}
-      .wrap{padding:18px 16px 16px}
-      .layout{grid-template-columns:1fr}
-      .question-groups{grid-template-columns:1fr}
+    @media (max-width: 760px){
+      body{padding:14px}
+      .wrap{padding:18px 14px}
+      .intro-grid{grid-template-columns:1fr 1fr}
+      .page-meta{font-size:.84rem}
+      .btn-row{flex-direction:column}
+      .btn-row #nextBtn,.btn-row #submitBtn{order:-1}
+      .tool-card{grid-template-columns:1fr}
+      .fit-label,.fit-note{text-align:left}
+      .result-actions{flex-direction:column}
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <p class="eyebrow">FIND YOUR PORTFOLIO TOOL — SELF CHECK</p>
-    <h1>あなたに<span class="grad">最適なポートフォリオ用ツール</span>診断</h1>
-    <div class="subline"></div>
-    <p class="lead">当てはまるものにチェック ✓ — 4つの軸から立体的に判定。タグの合計が最も多いツールが、今のあなたに合うポートフォリオ用ツールです。</p>
+    <div id="startScreen">
+      <p class="eyebrow">FIND YOUR PORTFOLIO TOOL — SELF CHECK</p>
+      <h1>あなたに<span class="grad">最適なポートフォリオ用ツール</span>診断</h1>
+      <div class="subline"></div>
+      <p class="lead">4つの軸から立体的に判定。最後に、今のあなたに合うポートフォリオ用ツールが表示されます。</p>
 
-    <div class="layout">
-      <section class="panel">
-        <h2 class="section-title">QUESTIONS <small>/ 16</small></h2>
-        <div class="question-groups" id="questionGroups"></div>
-        <div class="rule">同点なら「更新のしやすさ」を優先。続けられるツール選びをいちばん大切にします。</div>
-        <div class="actions">
-          <button class="primary" id="resetBtn" type="button">診断をリセット</button>
-          <button class="secondary" id="copyBtn" type="button">結果文をコピー</button>
+      <div class="intro-grid">
+        <div class="intro-item">
+          <div class="label">設問数</div>
+          <div class="value">全16問</div>
         </div>
-        <p class="footer-note">※ HTML / CSS / JavaScriptだけで動くので、GitHub Pagesで無料公開できます。</p>
-      </section>
+        <div class="intro-item">
+          <div class="label">ページ数</div>
+          <div class="value">4ページ</div>
+        </div>
+        <div class="intro-item">
+          <div class="label">診断対象</div>
+          <div class="value">4ツール</div>
+        </div>
+        <div class="intro-item">
+          <div class="label">判定方法</div>
+          <div class="value">複数選択式</div>
+        </div>
+      </div>
 
-      <aside class="panel">
-        <h2 class="section-title">RESULT</h2>
-        <p class="result-copy" id="summaryText">最多のツール = あなたの相性◎</p>
-        <div class="result-list" id="resultList"></div>
-        <div class="tool-desc" id="toolDesc"></div>
-      </aside>
+      <div class="notice">
+        <p>💡 当てはまるものを自由にチェックしてください。</p>
+        <p>4つの軸（発信スタイル / 制作物のタイプ / 更新のリズム / 目指す方向性）から判定します。</p>
+        <p>同点なら「更新のしやすさ」を優先して、続けやすいツールをおすすめします。</p>
+      </div>
+
+      <button class="start-btn" id="startBtn" type="button">診断スタート</button>
     </div>
+
+    <section class="card hidden" id="quizScreen">
+      <div class="quiz-header">
+        <p class="eyebrow">PORTFOLIO TOOL CHECK</p>
+        <h2 class="quiz-title">あなたに最適なポートフォリオ用ツール診断</h2>
+        <p class="quiz-sub">各ページで、当てはまるものをすべて選んでください</p>
+      </div>
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="page-meta">
+        <span id="pageInfo"></span>
+        <span id="answerInfo"></span>
+      </div>
+      <div id="questionArea"></div>
+      <div class="rule">同点なら「更新のしやすさ」を優先。続けられるツール選びをいちばん大切にします。</div>
+      <div class="btn-row">
+        <button class="btn ghost" id="prevBtn" type="button">戻る</button>
+        <button class="btn primary" id="nextBtn" type="button">次へ</button>
+        <button class="btn primary hidden" id="submitBtn" type="button">結果を見る</button>
+      </div>
+    </section>
+
+    <section class="card hidden" id="resultScreen">
+      <div class="quiz-header">
+        <p class="eyebrow">YOUR RESULT</p>
+        <h2 class="quiz-title">診断結果</h2>
+        <p class="quiz-sub">最後まで答えた結果、今のあなたに合うツールはこちらです</p>
+      </div>
+
+      <div class="result-hero">
+        <h3 id="summaryText">最多のツール = あなたの相性◎</h3>
+        <p>4つの軸をもとに、続けやすさまで含めて判定しています。</p>
+      </div>
+
+      <div class="result-list" id="resultList"></div>
+      <div class="tool-desc" id="toolDesc"></div>
+
+      <table class="score-table" id="scoreTable">
+        <thead>
+          <tr>
+            <th>ツール</th>
+            <th>一致数</th>
+            <th>割合</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="result-actions">
+        <button class="btn secondary" id="copyBtn" type="button">結果文をコピー</button>
+        <button class="btn ghost" id="retryBtn" type="button">もう一度診断する</button>
+      </div>
+    </section>
   </div>
 
   <script>
@@ -374,7 +574,7 @@
       }
     };
 
-    const QUESTION_GROUPS = [
+    const GROUPS = [
       {
         key:'A',
         title:'A. 発信スタイル',
@@ -421,110 +621,187 @@
       }
     ];
 
-    const questionGroupsEl = document.getElementById('questionGroups');
-    const resultListEl = document.getElementById('resultList');
-    const summaryTextEl = document.getElementById('summaryText');
-    const toolDescEl = document.getElementById('toolDesc');
-    const resetBtn = document.getElementById('resetBtn');
-    const copyBtn = document.getElementById('copyBtn');
+    const TIE_BREAK = ['notion', 'canva', 'note', 'studio'];
+    const answers = Array.from({ length: GROUPS.length }, () => []);
+    let currentPage = 0;
 
-    function renderQuestions(){
-      let questionIndex = 0;
-      questionGroupsEl.innerHTML = QUESTION_GROUPS.map(group => `
-        <section class="group">
+    const startScreen = document.getElementById('startScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const startBtn = document.getElementById('startBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const retryBtn = document.getElementById('retryBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const questionArea = document.getElementById('questionArea');
+    const progressFill = document.getElementById('progressFill');
+    const pageInfo = document.getElementById('pageInfo');
+    const answerInfo = document.getElementById('answerInfo');
+    const summaryText = document.getElementById('summaryText');
+    const resultList = document.getElementById('resultList');
+    const toolDesc = document.getElementById('toolDesc');
+    const scoreTableBody = document.querySelector('#scoreTable tbody');
+
+    function renderPage(){
+      const group = GROUPS[currentPage];
+      progressFill.style.width = `${((currentPage + 1) / GROUPS.length) * 100}%`;
+      pageInfo.textContent = `${currentPage + 1} / ${GROUPS.length} ページ`;
+      answerInfo.textContent = `このページ：${answers[currentPage].length} / ${group.questions.length} 選択中`;
+
+      questionArea.innerHTML = `
+        <section class="group-card">
           <h3>${group.title}</h3>
           <p>${group.subtitle}</p>
           <div class="q-list">
-            ${group.questions.map(q => {
-              const id = `q${questionIndex++}`;
+            ${group.questions.map((q, index) => {
+              const checked = answers[currentPage].includes(index) ? 'checked' : '';
               return `
                 <div class="q-item">
-                  <input type="checkbox" id="${id}" data-tool="${q.tool}">
-                  <label for="${id}">${q.text}<span class="pill ${TOOL_META[q.tool].tagClass}">${TOOL_META[q.tool].label}</span></label>
+                  <input type="checkbox" id="q-${currentPage}-${index}" data-index="${index}" ${checked}>
+                  <label for="q-${currentPage}-${index}">${q.text}<span class="pill ${TOOL_META[q.tool].tagClass}">${TOOL_META[q.tool].label}</span></label>
                 </div>
               `;
             }).join('')}
           </div>
         </section>
-      `).join('');
+      `;
+
+      prevBtn.disabled = currentPage === 0;
+      nextBtn.classList.toggle('hidden', currentPage === GROUPS.length - 1);
+      submitBtn.classList.toggle('hidden', currentPage !== GROUPS.length - 1);
+    }
+
+    function collectCurrentAnswers(){
+      answers[currentPage] = Array.from(questionArea.querySelectorAll('input[type="checkbox"]:checked'))
+        .map(el => Number(el.dataset.index));
+      answerInfo.textContent = `このページ：${answers[currentPage].length} / ${GROUPS[currentPage].questions.length} 選択中`;
     }
 
     function calculateScores(){
       const scores = { note:0, notion:0, canva:0, studio:0 };
-      document.querySelectorAll('#questionGroups input[type="checkbox"]').forEach(el => {
-        if(el.checked) scores[el.dataset.tool] += 1;
+      GROUPS.forEach((group, pageIdx) => {
+        answers[pageIdx].forEach(qIdx => {
+          const tool = group.questions[qIdx].tool;
+          scores[tool] += 1;
+        });
       });
       return scores;
     }
 
-    function ranking(scores){
-      const tieBreak = ['notion', 'canva', 'note', 'studio'];
+    function rankScores(scores){
       return Object.entries(scores)
-        .sort((a,b) => b[1] - a[1] || tieBreak.indexOf(a[0]) - tieBreak.indexOf(b[0]));
+        .sort((a,b) => b[1] - a[1] || TIE_BREAK.indexOf(a[0]) - TIE_BREAK.indexOf(b[0]));
     }
 
-    function renderResults(){
+    function renderResult(){
       const scores = calculateScores();
-      const ranked = ranking(scores);
+      const ranked = rankScores(scores);
       const [topTool, topScore] = ranked[0];
+      const meta = TOOL_META[topTool];
 
-      summaryTextEl.textContent = topScore === 0
-        ? 'まだ未選択です — 当てはまるものにチェックしてみてください。'
-        : `最多のツール = ${TOOL_META[topTool].label}（${topScore} / 4軸）`;
+      summaryText.textContent = topScore === 0
+        ? '未回答のため、まだ判定できません。'
+        : `あなたに最適なのは「${meta.label}」です（${topScore} / 16一致）`;
 
-      resultListEl.innerHTML = ranked.map(([tool, score], index) => {
-        const meta = TOOL_META[tool];
-        const fitText = score === 0 ? '未診断' : score >= 3 ? 'かなり相性◎' : score >= 2 ? '相性あり' : '候補としてあり';
+      resultList.innerHTML = ranked.map(([tool, score], index) => {
+        const item = TOOL_META[tool];
+        const fitText = score === 0 ? '未診断' : score >= 4 ? 'かなり相性◎' : score >= 2 ? '相性あり' : '候補としてあり';
         return `
-          <div class="tool-card ${meta.tagClass} ${index === 0 && topScore > 0 ? 'is-top' : ''}">
+          <div class="tool-card ${item.tagClass} ${index === 0 && topScore > 0 ? 'is-top' : ''}">
             <div>
-              <p class="tool-name">${meta.label}</p>
-              <div class="tool-meta">${meta.detail}</div>
-              <div class="score-chip">一致数 ${score} / 4</div>
+              <p class="tool-name">${item.label}</p>
+              <div class="tool-meta">${item.detail}</div>
+              <div class="score-chip">一致数 ${score} / 16</div>
             </div>
             <div>
-              <p class="fit-label">${meta.short}</p>
+              <p class="fit-label">${item.short}</p>
               <div class="fit-note">${fitText}</div>
             </div>
           </div>
         `;
       }).join('');
 
-      const meta = TOOL_META[topTool];
-      toolDescEl.innerHTML = topScore === 0 ? `
-        <h3>まずは気になる項目にチェックしてみよう</h3>
+      toolDesc.innerHTML = topScore === 0 ? `
+        <h4>まずは気になる項目にチェックしてみよう</h4>
         <p>4つの軸に答えるほど、あなたに合うポートフォリオ用ツールが見えやすくなります。</p>
       ` : `
-        <h3>${meta.label} が今のあなたにおすすめ</h3>
+        <h4>${meta.label} が今のあなたにおすすめ</h4>
         <p>${meta.desc}</p>
         <ul>${meta.bullets.map(item => `<li>${item}</li>`).join('')}</ul>
       `;
+
+      scoreTableBody.innerHTML = ranked.map(([tool, score]) => {
+        const pct = Math.round((score / 16) * 100);
+        return `
+          <tr>
+            <td>${TOOL_META[tool].label}</td>
+            <td>${score} / 16</td>
+            <td>
+              <div class="bar"><div style="width:${pct}%"></div></div>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
-    function copyResult(){
+    function startQuiz(){
+      startScreen.classList.add('hidden');
+      resultScreen.classList.add('hidden');
+      quizScreen.classList.remove('hidden');
+      currentPage = 0;
+      renderPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showResult(){
+      collectCurrentAnswers();
+      quizScreen.classList.add('hidden');
+      resultScreen.classList.remove('hidden');
+      renderResult();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetDiagnosis(){
+      for(let i=0;i<answers.length;i++) answers[i] = [];
+      currentPage = 0;
+      resultScreen.classList.add('hidden');
+      quizScreen.classList.add('hidden');
+      startScreen.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyResultText(){
       const scores = calculateScores();
-      const ranked = ranking(scores);
+      const ranked = rankScores(scores);
       const [topTool, topScore] = ranked[0];
       const meta = TOOL_META[topTool];
       const text = topScore === 0
-        ? 'まだ診断していません。気になる項目にチェックしてみてください。'
-        : `【ポートフォリオ用ツール診断】\n結果は「${meta.label}」でした。\n${meta.desc}\n\n#ポートフォリオ #ツール診断`;
-
+        ? 'まだ診断結果はありません。'
+        : `【ポートフォリオ用ツール診断】\n私に合うツールは「${meta.label}」でした。\n${meta.desc}\n\n#ポートフォリオ #ツール診断`;
       navigator.clipboard.writeText(text).then(() => {
         copyBtn.textContent = 'コピーしました';
         setTimeout(() => { copyBtn.textContent = '結果文をコピー'; }, 1200);
       });
     }
 
-    renderQuestions();
-    renderResults();
-    questionGroupsEl.addEventListener('change', renderResults);
-    resetBtn.addEventListener('click', () => {
-      document.querySelectorAll('#questionGroups input').forEach(el => { el.checked = false; });
-      renderResults();
+    startBtn.addEventListener('click', startQuiz);
+    prevBtn.addEventListener('click', () => {
+      collectCurrentAnswers();
+      if(currentPage === 0) return;
+      currentPage -= 1;
+      renderPage();
     });
-    copyBtn.addEventListener('click', copyResult);
+    nextBtn.addEventListener('click', () => {
+      collectCurrentAnswers();
+      if(currentPage >= GROUPS.length - 1) return;
+      currentPage += 1;
+      renderPage();
+    });
+    submitBtn.addEventListener('click', showResult);
+    questionArea.addEventListener('change', collectCurrentAnswers);
+    retryBtn.addEventListener('click', resetDiagnosis);
+    copyBtn.addEventListener('click', copyResultText);
   </script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body>
 </html>
