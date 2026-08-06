@@ -476,7 +476,6 @@
         <span id="answerInfo"></span>
       </div>
       <div id="questionArea"></div>
-      <div class="rule">Q1は使えるツールの確認です。同点なら「更新のしやすさ」を優先して判定します。</div>
       <div class="btn-row">
         <button class="btn ghost" id="prevBtn" type="button">戻る</button>
         <button class="btn primary" id="nextBtn" type="button">次へ</button>
@@ -594,10 +593,10 @@
         description: '当てはまるものをすべて選んでください',
         multi: true,
         options: [
-          { id: 'under10_with_text', label: '作品数は10以下で、文章も添えて見せたい', scores: { note: 1 } },
-          { id: 'many_and_organized', label: '作品数が多く、カテゴリで整理して見せたい', scores: { notion: 1 } },
-          { id: 'visual_worldview', label: 'ビジュアル重視で、世界観を作りたい', scores: { canva: 1 } },
-          { id: 'site_is_work', label: 'サイト自体を実績として見せたい', scores: { studio: 1 } }
+          { id: 'under10_with_text', label: '作品数は10以下だったり、説明文を載せながらシンプルに見せたい', scores: { note: 1 } },
+          { id: 'many_and_organized', label: '作品数が多めだったり、カテゴリで整理して見せたい', scores: { notion: 1 } },
+          { id: 'visual_worldview', label: '作品数は多くはないが、ビジュアルにこだわりたい、カラフルにしたい', scores: { canva: 1 } },
+          { id: 'site_is_work', label: 'サイト自体が実績になるように見せたい', scores: { studio: 1 } }
         ]
       },
       {
@@ -606,10 +605,10 @@
         description: '当てはまるものをすべて選んでください',
         multi: true,
         options: [
-          { id: 'text_sns', label: 'ThreadsやXなど、テキストメインのSNSから流入させたい', scores: { note: 1 } },
-          { id: 'client_meeting', label: 'クライアント面談時に一覧で提示したい', scores: { notion: 1 } },
-          { id: 'instagram_link', label: 'InstagramのストーリーズやプロフィールURLに置いておきたい', scores: { canva: 1 } },
-          { id: 'web_orders', label: 'Web制作の受注につなげたい', scores: { studio: 1 } }
+          { id: 'text_sns', label: 'シンプルにしたいし、ThreadsやXなどテキストメインのSNSから流入させたい', scores: { note: 1 } },
+          { id: 'client_meeting', label: 'おしゃれよりも誠実さやシンプルさ、スマートさを表現したい', scores: { notion: 1 } },
+          { id: 'instagram_link', label: 'おしゃれやオリジナリティを重視したいし、Instagramで紹介したい', scores: { canva: 1 } },
+          { id: 'web_orders', label: 'デザインだけじゃなく、Web制作の受注にもつなげたい', scores: { studio: 1 } }
         ]
       }
     ];
